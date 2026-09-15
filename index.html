@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sandra Mya Gonzales - Computer Science student portfolio">
+  <title>Sandra Mya Gonzales | Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-noise" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Back to introduction">
+      <span class="brand-mark">SM</span>
+      <span class="brand-copy"><strong>Sandra Mya</strong><small>CS Portfolio / 2026</small></span>
+    </a>
+    <nav class="top-nav" aria-label="Primary navigation">
+      <a href="#about">About me</a>
+      <a href="#directory">File directory</a>
+      <a class="nav-contact" href="mailto:sandra@example.com">Say hello <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero section-shell" aria-labelledby="intro-title">
+      <div class="hero-copy reveal">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> Student portfolio / Cavite State University</p>
+        <h1 id="intro-title">Hi, I'm <em>Sandra<br>Mya Gonzales</em></h1>
+        <p class="hero-role">BSCS 3A <span>•</span> Computer Science Student</p>
+        <p class="hero-description">I am a computer science student who is continuously learning about programming, technology, design, and different areas of computer science. This portfolio contains my academic activities, quizzes, projects, laboratory work, and other learning outputs.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#directory">Explore my work <span aria-hidden="true">↓</span></a>
+          <a class="text-link" href="#about">More about me <span aria-hidden="true">↘</span></a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-label="Abstract pink portfolio illustration">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+        <div class="art-card">
+          <div class="art-card-top"><span>STUDENT<br>ARCHIVE</span><span>01 / 26</span></div>
+          <div class="art-initials">S<span>M</span></div>
+          <div class="art-card-bottom"><span>learning in public</span><span>✦</span></div>
+        </div>
+        <div class="art-sticker sticker-main">CURIOUS<br>BY DESIGN</div>
+        <div class="art-sticker sticker-small">BUILD<br>· LEARN<br>· REPEAT</div>
+      </div>
+    </section>
+
+    <section class="about section-shell" id="about" aria-labelledby="about-title">
+      <div class="section-intro reveal">
+        <p class="section-number">01 / PROFILE</p>
+        <h2 id="about-title">A little bit<br><em>about me.</em></h2>
+        <p>Every output is a snapshot of a skill in progress. Here is the academic profile behind the work.</p>
+      </div>
+      <div class="profile-panel reveal">
+        <div class="panel-label"><span class="label-dot"></span> Academic Profile</div>
+        <h3>Hello, I am Sandra Mya Gonzales, currently a 3rd-year student pursuing a Bachelor of Science in Computer Science at Cavite State University - Silang Campus.</h3>
+        <div class="profile-list">
+          <div><span>Name</span><strong>Sandra Mya Gonzales</strong></div>
+          <div><span>University</span><strong>Cavite State University - Silang Campus</strong></div>
+          <div><span>Degree</span><strong>Bachelor of Science in Computer Science</strong></div>
+          <div><span>Section</span><strong>BSCS 3A</strong></div>
+          <div><span>Standing</span><strong>3rd Year Undergraduate (2026)</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="directory section-shell" id="directory" aria-labelledby="directory-title">
+      <div class="directory-heading reveal">
+        <div>
+          <p class="section-number">02 / WORKSPACE</p>
+          <h2 id="directory-title">File <em>Directory</em></h2>
+        </div>
+        <p class="directory-note">A living archive of my academic journey.<br>Add files, open them, and keep learning.</p>
+      </div>
+      <div class="directory-app reveal">
+        <aside class="folder-sidebar" aria-label="Folder list">
+          <div class="sidebar-top"><span>MY ARCHIVE</span><span class="online-indicator">● ONLINE</span></div>
+          <button class="folder-button active" data-folder="activities"><span class="folder-icon">✦</span><span>Activities</span><b data-count="activities">0</b></button>
+          <button class="folder-button" data-folder="quizzes"><span class="folder-icon">◇</span><span>Quizzes</span><b data-count="quizzes">0</b></button>
+          <button class="folder-button" data-folder="projects"><span class="folder-icon">▣</span><span>Projects</span><b data-count="projects">0</b></button>
+          <button class="folder-button" data-folder="laboratory"><span class="folder-icon">⌁</span><span>Laboratory work</span><b data-count="laboratory">0</b></button>
+          <div class="sidebar-footer"><span class="storage-icon">▧</span><div><small>LOCAL STORAGE</small><strong>Your files stay here</strong></div></div>
+        </aside>
+        <div class="file-workspace">
+          <div class="workspace-header">
+            <div><p class="workspace-kicker">CURRENT FOLDER</p><h3 id="current-folder-title">Activities</h3></div>
+            <label class="button button-dark upload-label" for="file-input"><span aria-hidden="true">＋</span> Add file</label>
+            <input id="file-input" type="file" multiple hidden>
+          </div>
+          <div class="drop-zone" id="drop-zone">
+            <div class="drop-icon">＋</div>
+            <strong>Drop files here or add from your device</strong>
+            <span>Files are added to <b id="drop-folder-name">Activities</b></span>
+          </div>
+          <div class="file-list" id="file-list" aria-live="polite"></div>
+          <div class="workspace-status"><span><i class="status-dot"></i><span id="file-count-label">0 files</span> in this folder</span><span>Local archive</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-shell">
+    <div><span class="brand-mark">SM</span><strong>Keep making, keep learning.</strong></div>
+    <p>© 2026 Sandra Mya Gonzales <span>•</span> BSCS 3A</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
