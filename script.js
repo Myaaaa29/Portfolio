@@ -20,6 +20,10 @@ const dropZone = document.querySelector('#drop-zone');
 const folderTitle = document.querySelector('#current-folder-title');
 const dropFolderName = document.querySelector('#drop-folder-name');
 const fileCountLabel = document.querySelector('#file-count-label');
+const filePreviewModal = document.querySelector('#file-preview-modal');
+const filePreviewTitle = document.querySelector('#file-preview-title');
+const filePreviewContent = document.querySelector('#file-preview-content');
+const fileModalClose = document.querySelector('#file-modal-close');
 
 function saveFiles() {
   localStorage.setItem('sandraPortfolioFiles', JSON.stringify(state.files));
@@ -31,8 +35,49 @@ function formatBytes(bytes) {
 }
 
 function fileType(name) {
-  const extension = name.split('.').pop().toLowerCase();
+  const extension = getFileExtension(name);
   return extension.length > 4 ? 'file' : extension;
+}
+
+function getFileExtension(name) {
+  const cleanName = String(name || '').split(/[?#]/)[0];
+  const lastDot = cleanName.lastIndexOf('.');
+  return lastDot > -1 ? cleanName.slice(lastDot + 1).toLowerCase() : '';
+}
+
+function createFileElement(file, index) {
+  const row = document.createElement('div');
+  row.className = 'file-row';
+
+  const type = document.createElement('div');
+  type.className = 'file-type';
+  type.textContent = fileType(file.name);
+
+  const details = document.createElement('div');
+  details.className = 'file-details';
+  const name = document.createElement('strong');
+  name.title = file.name;
+  name.textContent = file.name;
+  const metadata = document.createElement('span');
+  metadata.textContent = `${formatBytes(file.size)} · Added ${file.added}`;
+  details.append(name, metadata);
+
+  const actions = document.createElement('div');
+  actions.className = 'file-actions';
+  const viewButton = document.createElement('button');
+  viewButton.className = 'file-action';
+  viewButton.type = 'button';
+  viewButton.dataset.view = index;
+  viewButton.textContent = 'View';
+  const removeButton = document.createElement('button');
+  removeButton.className = 'file-action';
+  removeButton.type = 'button';
+  removeButton.dataset.remove = index;
+  removeButton.textContent = 'Remove';
+  actions.append(viewButton, removeButton);
+
+  row.append(type, details, actions);
+  return row;
 }
 
 function render() {
@@ -55,13 +100,55 @@ function render() {
     return;
   }
 
-  fileList.innerHTML = currentFiles.map((file, index) => `
-    <div class="file-row">
-      <div class="file-type">${fileType(file.name)}</div>
-      <div class="file-details"><a class="file-link" href="${file.content}" target="_blank" rel="noopener" title="Open ${file.name}">${file.name}</a><span>${formatBytes(file.size)} · Added ${file.added}</span></div>
-      <div class="file-actions"><button class="file-action" data-remove="${index}">Remove</button></div>
-    </div>
-  `).join('');
+  fileList.replaceChildren(...currentFiles.map(createFileElement));
+}
+
+function closeModal() {
+  filePreviewContent.replaceChildren();
+  filePreviewModal.hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+function openModal(file) {
+  closeModal();
+  if (!file || typeof file.content !== 'string' || !file.content) {
+    filePreviewTitle.textContent = 'Preview unavailable';
+    const message = document.createElement('p');
+    message.textContent = 'This file has no valid content to preview.';
+    filePreviewContent.append(message);
+    filePreviewModal.hidden = false;
+    document.body.classList.add('modal-open');
+    return;
+  }
+
+  filePreviewTitle.textContent = file.name || 'File preview';
+  const extension = getFileExtension(file.name);
+  const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension);
+
+  if (isImage) {
+    const image = document.createElement('img');
+    image.src = file.content;
+    image.alt = file.name || 'Selected file';
+    image.addEventListener('error', closeModal, { once: true });
+    filePreviewContent.append(image);
+  } else if (extension === 'pdf') {
+    const frame = document.createElement('iframe');
+    frame.src = file.content;
+    frame.title = file.name || 'PDF preview';
+    filePreviewContent.append(frame);
+  } else {
+    const message = document.createElement('p');
+    message.textContent = 'Preview not available for this file type.';
+    const download = document.createElement('a');
+    download.className = 'button button-dark file-download';
+    download.href = file.content;
+    download.download = file.name || 'download';
+    download.textContent = 'Download file';
+    filePreviewContent.append(message, download);
+  }
+
+  filePreviewModal.hidden = false;
+  document.body.classList.add('modal-open');
 }
 
 function addFiles(fileCollection) {
@@ -108,12 +195,25 @@ dropZone.addEventListener('drop', (event) => {
 });
 
 fileList.addEventListener('click', (event) => {
+  const viewIndex = event.target.dataset.view;
   const removeIndex = event.target.dataset.remove;
+  if (viewIndex !== undefined) {
+    const file = state.files[state.activeFolder][viewIndex];
+    openModal(file);
+  }
   if (removeIndex !== undefined) {
     state.files[state.activeFolder].splice(removeIndex, 1);
     saveFiles();
     render();
   }
+});
+
+fileModalClose.addEventListener('click', closeModal);
+filePreviewModal.addEventListener('click', (event) => {
+  if (event.target === filePreviewModal) closeModal();
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !filePreviewModal.hidden) closeModal();
 });
 
 render();
