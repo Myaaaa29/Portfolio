@@ -58,8 +58,8 @@ function render() {
   fileList.innerHTML = currentFiles.map((file, index) => `
     <div class="file-row">
       <div class="file-type">${fileType(file.name)}</div>
-      <div class="file-details"><strong title="${file.name}">${file.name}</strong><span>${formatBytes(file.size)} · Added ${file.added}</span></div>
-      <div class="file-actions"><button class="file-action" data-view="${index}">View</button><button class="file-action" data-remove="${index}">Remove</button></div>
+      <div class="file-details"><a class="file-link" href="${file.content}" target="_blank" rel="noopener" title="Open ${file.name}">${file.name}</a><span>${formatBytes(file.size)} · Added ${file.added}</span></div>
+      <div class="file-actions"><button class="file-action" data-remove="${index}">Remove</button></div>
     </div>
   `).join('');
 }
@@ -108,17 +108,7 @@ dropZone.addEventListener('drop', (event) => {
 });
 
 fileList.addEventListener('click', (event) => {
-  const viewIndex = event.target.dataset.view;
   const removeIndex = event.target.dataset.remove;
-  if (viewIndex !== undefined) {
-    const file = state.files[state.activeFolder][viewIndex];
-    const preview = window.open();
-    if (preview) {
-      preview.document.write(`<title>${file.name}</title><p style="font: 16px sans-serif; padding: 40px">Previewing <strong>${file.name}</strong>. Close this tab when you are done.</p>`);
-      if (file.type.startsWith('image/')) preview.document.body.innerHTML = `<img src="${file.content}" alt="${file.name}" style="max-width: 90vw; max-height: 90vh; display: block; margin: 5vh auto">`;
-      else preview.location.href = file.content;
-    }
-  }
   if (removeIndex !== undefined) {
     state.files[state.activeFolder].splice(removeIndex, 1);
     saveFiles();
